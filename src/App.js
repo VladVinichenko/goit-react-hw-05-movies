@@ -1,5 +1,11 @@
-import { BrowserRouter, Route } from "react-router-dom"
+import { BrowserRouter, Link, Route, Switch } from "react-router-dom"
 import { HomePage } from './pages/HomePage/HomePage'
+import { MoviesPage } from "./pages/MoviesPage/MoviesPage"
+import { ROUTERS } from "./consts"
+import fetchApi from "./AppService"
+
+
+console.log(fetchApi('trending'));
 
 export const App = () => {
   return (
@@ -9,11 +15,17 @@ export const App = () => {
 
       </header>
       <ul>
-        <li>Home</li>
-        <li>Movies</li>
+        <li>
+          <Link to={ROUTERS.HOME}>Home</Link>
+        </li>
+        <li>
+          <Link to={ROUTERS.MOVIES}>Movies</Link>
+        </li>
       </ul>
-      <Route path='/' component={HomePage} exact />
-
+      <Switch>
+        <Route path={ROUTERS.HOME} component={HomePage} />
+        <Route path={ROUTERS.MOVIES} component={MoviesPage} />
+      </Switch>
     </BrowserRouter
     >
   )
