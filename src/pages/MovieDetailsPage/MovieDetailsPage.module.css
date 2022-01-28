@@ -1,8 +1,5 @@
-.gallery {
-  display: grid;
-  max-width: calc(100vw - 48px);
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  grid-gap: 16px;
+.ox {
+  display: flex;
   margin-top: 0;
   margin-bottom: 0;
   padding: 0;
@@ -37,4 +34,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.title {
+  font-size: 30px;
+  color: wheat;
 }

@@ -3,7 +3,6 @@ const KEY = 'api_key=44391b84e3d702feb61131e7b6857e4b'
 
 
 export default function fetchApi(type = 'trending', value = '', page = 1, options) {
-  // const try = value.split(' ').join('%20')
   const trending = () => { return `all/week?page=${page}&${KEY}` }
   const search = () => { return `movie?${KEY}&query=${value.split(' ').join('%20')}&page=${page}&include_adult=false` }
   const credits = () => { return `/credits` }
@@ -12,6 +11,7 @@ export default function fetchApi(type = 'trending', value = '', page = 1, option
   const movie = () => { return `${value}${options === 'credits' ? credits() : ''}${options === 'reviews' ? reviews() : ''}?${KEY}${options === 'reviews' ? pages() : ''}` }
   const fetchSettings = `3/${type}/${type === 'movie' ? movie() : ''}${type === 'trending' ? trending() : ''}${type === 'search' ? search() : ''}`;
   const url = BASE_URL + fetchSettings
+  // console.log(url);
   return fetch(url).then(
     res => {
       if (res.ok) {

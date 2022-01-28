@@ -1,4 +1,5 @@
 export const ROUTERS = {
   HOME: '/',
-  MOVIES: '/movies'
+  MOVIES: '/movies',
+  ONE_MOVIE: '/movies/:id',
 }

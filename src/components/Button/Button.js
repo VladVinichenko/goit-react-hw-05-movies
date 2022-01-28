@@ -10,7 +10,7 @@ const Button = ({ name, action, children }) => {
 Button.propTypes = {
   name: propTypes.string,
   action: propTypes.func,
-  children: propTypes.string
+  // children: propTypes.string
 }
 
 export default Button;

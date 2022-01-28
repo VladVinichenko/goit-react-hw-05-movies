@@ -1,105 +1,100 @@
-import propTypes from "prop-types";
-import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem'
 import s from './ImageGallery.module.css'
-import fetchApi from '../../AppService';
+
 import React, { useState, useEffect } from "react";
-import { Fragment } from 'react/cjs/react.production.min';
+import { Fragment } from "react/cjs/react.production.min";
+import fetchApi from '../../AppService';
 import Loader from '../Loader/Loader';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Button from '../Button/Button';
+import propTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { ROUTERS } from '../../consts';
 
-function ImageGallery({ searchName, onClickLargeImageURL }) {
-  const [images, setImages] = useState([])
-  const [status, setStatus] = useState('idle')
-  const [error, setError] = useState(null)
+function ImageGallery({ searchName = '', options = 'search' }) {
+  const [status, setStatus] = useState('search')
   const [page, setPage] = useState(1)
-  const myRef = React.createRef()
+  const [error, setError] = useState(null)
+  const [movies, setMovies] = useState([])
 
-  const fetchImages = (option) => {
-    if (searchName.trim().length > 0) {
-      option === 'searchName' && setImages([])
+  const fetchMovies = () => {
+    if (searchName.trim().length > 0 || options === 'trending') {
+      setMovies([])
       setStatus('pending')
-
-      fetchApi(searchName, page)
+      fetchApi(options, searchName, page)
         .then(el => {
-          if (el.hits.length === 0) {
-            setImages([])
+          if (el.results.length === 0) {
+            setMovies([])
             return Promise.reject(
               new Error(`No results were found for this: ${searchName}`)
             )
           }
-          el.hits[0] = { ...el.hits[0], myRef: myRef };
-
-          if (option === 'searchName') {
-            setImages([...el.hits])
-          } else if (option === 'page') {
-            setImages([...images, ...el.hits])
-          }
+          el.results[0] = { ...el.results[0] };
+          setMovies([...el.results])
           setStatus('resolved')
-          scrollInto(myRef);
         })
         .catch(errorRejected => {
           setError(errorRejected);
           setStatus('rejected')
         }
         )
-
     }
   }
 
-  useEffect(() => {
-    fetchImages('page')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page])
-
 
   useEffect(() => {
-    fetchImages('searchName')
+    options === 'trending' && setStatus('pending')
+    fetchMovies()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchName])
+  }, [])
 
-
-
-  const scrollInto = elem => {
-    elem.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-    });
-  };
+  useEffect(() => {
+    fetchMovies()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchName, page])
 
   const nextPage = () => {
     setPage(page + 1)
   };
 
+  const prevPage = () => {
+    setPage(page - 1)
+  };
+
   return (
     <Fragment>
-      {status === 'idle' && <p className={s.idle}>Input value</p>}
+      {status === 'search' && <p className={s.idle}>Input value</p>}
       {status === 'rejected' && <strong className={s.strong}>{error.message}</strong>}
-
-      {images.length > 0 && (
+      {movies.length > 0 && (
         <ul className={s.gallery} >
           {
-            images.map(el => (
-              <ImageGalleryItem
-                key={el.id}
-                url={el.webformatURL}
-                alt={el.tags}
-                myRef={el.myRef}
-                largeImageURL={el.largeImageURL}
-                onClickLargeImageURL={onClickLargeImageURL}
-              />
+            movies.map(el => (
+              <Link to={`${ROUTERS.ONE_MOVIE}${el.id}`} key={el.id}>
+                <ImageGalleryItem
+                  id={el.id}
+                  url={el.poster_path}
+                  alt={el.name}
+                  title={el.original_title ? el.original_title : el.name}
+                />
+              </Link>
             ))
           }
         </ul>
-      )}
+      )
+      }
       {status === 'pending' && <Loader />}
-      {status === 'resolved' && <Button action={nextPage}>Load more</Button>}
-    </Fragment>
+      <div className={s.navBox}>
+        {status === 'resolved' && page > 1 ? <Button action={prevPage}>Prev Page ({page - 1})</Button> : ''}
+        {status === 'resolved' && <p className={s.currentPage}>{page}</p>}
+        {status === 'resolved' && <Button action={nextPage}>Next Page ({page + 1})</Button>}
+      </div>
+
+
+    </Fragment >
   )
 }
 
 ImageGallery.propTypes = {
-  searchName: propTypes.string,
-  onClickLargeImageURL: propTypes.func
+  options: propTypes.string
 }
 
 export default ImageGallery

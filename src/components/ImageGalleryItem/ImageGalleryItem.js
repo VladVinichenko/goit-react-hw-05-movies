@@ -1,14 +1,18 @@
 import propTypes from 'prop-types'
 import s from './ImageGalleryItem.module.css'
-
-const ImageGalleryItem = ({ url, alt, myRef, largeImageURL, onClickLargeImageURL }) => {
+const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+const ImageGalleryItem = ({ url, alt, title, id }) => {
   return (
-    <li className={s.galleryItem}>
-      {myRef ? (
-        <img className={s.galleryImage} src={url} alt={alt} loading="lazy" ref={myRef} onClick={() => onClickLargeImageURL(largeImageURL, alt)} />
+    <li className={s.galleryItem} id={id}>
+      {url ? (
+        <img className={s.galleryImage} src={IMG_URL + url} alt={alt} loading="lazy" />
       ) : (
-        <img className={s.galleryImage} src={url} alt={alt} loading="lazy" onClick={() => onClickLargeImageURL(largeImageURL, alt)} />
-      )}
+        <div className={s.noImage} >No title</div>
+      )
+      }
+
+
+      <h3 className={s.title}>{title}</h3>
     </li>
   )
 }
@@ -18,7 +22,7 @@ ImageGalleryItem.propTypes = {
   alt: propTypes.string,
   myRef: propTypes.object,
   largeImageURL: propTypes.string,
-  onClickLargeImageURL: propTypes.func
+  onClickId: propTypes.func
 }
 
 export default ImageGalleryItem

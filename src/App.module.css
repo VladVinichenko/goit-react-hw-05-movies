@@ -1,9 +1,16 @@
 .header {
   background-color: var(--background-color);
   display: flex;
-  align-items: center;
+  align-items: bottom;
   box-shadow: 0 0 10px rgb(17, 17, 17);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  justify-content: left;
+  height: 80px;
+  padding-left: 280px;
 }
+
 .preLogo {
   color: rgb(143, 143, 143);
   font-size: 35px;
@@ -14,20 +21,26 @@
   margin-right: 40px;
   text-shadow: 0 0 5px rgb(0, 0, 0);
   background: linear-gradient(to right, rgb(99, 0, 124), transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 80px;
+  z-index: -1;
 }
 
 .navList {
   display: flex;
   padding: 20px 20px;
+  height: min-content;
+  flex-wrap: wrap;
 }
 
 .link {
   border: none;
   border-radius: var(--card-radius);
-  padding: 5px 8px;
+  padding: 8px 30px;
   outline: none;
   background-color: var(--background-color);
-
   color: rgb(151, 151, 151);
   font-size: 22px;
   box-shadow: var(--card-shadow);
@@ -40,11 +53,27 @@
   background: var(--background-hover-style);
 }
 
-.navItem:not(:last-child) {
-  margin-right: 18px;
+.navItem {
+  height: min-content;
 }
 
-.link.active {
+.navItem:not(:last-child) {
+  margin-right: 23px;
+}
+
+.selected {
   color: yellow;
-  /* composes: link; */
+  background-color: rgb(83, 24, 64);
+  box-shadow: var(--card-hover-shadow);
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    height: 136px;
+    padding-left: 230px;
+  }
+
+  .link:first-child {
+    margin-bottom: 20px;
+  }
 }

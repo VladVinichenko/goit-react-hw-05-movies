@@ -5,6 +5,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: sticky;
+  z-index: 31;
+  top: 80px;
+  box-shadow: 0 10px 10px rgba(17, 17, 17, 0.5);
 }
 
 .form {
