@@ -3,36 +3,11 @@ import { HomePage } from './pages/HomePage/HomePage'
 import { MoviesPage } from "./pages/MoviesPage/MoviesPage"
 import { MovieDetailsPage } from "./pages/MovieDetailsPage/MovieDetailsPage"
 import { ROUTERS } from "./consts"
-import fetchApi from "./AppService"
-import React, { useState, useEffect } from "react";
 import s from './App.module.css'
 import { ToastContainer } from "react-toastify";
 
 
 export const App = () => {
-
-  const [error, setError] = useState(null)
-
-  /*   
-  trending page 1 - fetchApi()
-  trending - fetchApi('trending', '', {page})
-  search page 1 - fetchApi('search', {value})
-  search - fetchApi('search', {value}, {page})
-  for id - fetchApi('movie', {id})
-  for id + credits (only credits) - fetchApi('movie', {id}, '', 'credits')
-  for id + reviews (only reviews) - fetchApi('movie', {id}, {page}, 'reviews')
-  */
-
-
-  // console.log(
-  //   fetchApi('movie', 585083)
-  //     .then()
-  //     .catch(errorRejected => {
-  //       setError(errorRejected);
-  //     })
-  // )
-
-
   return (
     <BrowserRouter>
       <header className={s.header}>
@@ -46,7 +21,6 @@ export const App = () => {
           </li>
         </ul>
       </header >
-
       <Switch>
         <Route path={ROUTERS.ONE_MOVIE} component={MovieDetailsPage} />
         <Route path={ROUTERS.MOVIES} component={MoviesPage} />
