@@ -1,44 +1,78 @@
 import s from './HomePage.module.css'
 
 import Section from "../../components/Section/Section";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Fragment } from "react/cjs/react.production.min";
 import propTypes from "prop-types";
-import Searchbar from "../../components/Searchbar/Searchbar";
-import ImageGallery from "../../components/ImageGallery/ImageGallery";
-import Modal from "../../components/Modal/Modal";
-import { ToastContainer } from "react-toastify";
+// import Searchbar from "../../components/Searchbar/Searchbar";
+// import ImageGallery from "../../components/ImageGallery/ImageGallery";
+// import Modal from "../../components/Modal/Modal";
+// import { ToastContainer } from "react-toastify";
+import fetchApi from '../../AppService';
+// import Loader from '../Loader/Loader';
+import Loader from '../../components/Loader/Loader';
+import ImageGalleryItem from '../../components/ImageGalleryItem/ImageGalleryItem';
 
 export function HomePage() {
-  const [searchName1, setSearchName] = useState('')
-  const [showModal, setShowModal] = useState(false)
-  const [option, setOption] = useState({})
+  const [status, setStatus] = useState('idle')
+  const [page, setPage] = useState(1)
+  const [error, setError] = useState(null)
+  const [movies, setMovies] = useState([])
 
-  const onSubmitSearchName = (inputData) => {
-    setSearchName(inputData)
+  const fetchMovies = (option) => {
+
+    option === 'searchName' && setMovies([])
+    setStatus('pending')
+
+    fetchApi()
+      .then(el => {
+        if (el.results.length === 0) {
+          setMovies([])
+          return Promise.reject(
+            new Error(`No results were found`)
+          )
+        }
+        el.results[0] = { ...el.results[0] };
+        setMovies([...el.results])
+        setStatus('resolved')
+      })
+      .catch(errorRejected => {
+        setError(errorRejected);
+        setStatus('rejected')
+      }
+      )
+
+
   }
 
-  const toggleModalWindow = (url, alt) => {
-    setShowModal(!showModal)
-    setOption({ imageUrl: url, imageAlt: alt })
-  };
+
+
+
+  useEffect(() => {
+    fetchMovies('page')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page])
 
   return (
     <Fragment>
-      <Searchbar onSubmitSearchName={onSubmitSearchName} />
-      <Section>
-        <ImageGallery searchName={searchName1} onClickLargeImageURL={toggleModalWindow} />
-      </Section>
-      {
-        showModal && (
-          <Modal
-            url={option.imageUrl}
-            alt={option.imageAlt}
-            onCloseModal={toggleModalWindow}
-          />
-        )
-      }
-      <ToastContainer autoClose={4000} />
-    </Fragment >
+      {status === 'idle' && <p className={s.idle}>Input value</p>}
+      {status === 'rejected' && <strong className={s.strong}>{error.message}</strong>}
+
+      {movies.length > 0 && (
+        <ul className={s.gallery} >
+          {
+            movies.map(el => (
+              <ImageGalleryItem
+                key={el.id}
+                url={el.poster_path}
+                alt={el.original_title}
+              />
+            ))
+          }
+        </ul>
+      )}
+      {status === 'pending' && <Loader />}
+      {/* {status === 'resolved' && <Button action={nextPage}>Load more</Button>} */}
+    </Fragment>
   )
 }

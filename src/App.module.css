@@ -1,0 +1,50 @@
+.header {
+  background-color: var(--background-color);
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 10px rgb(17, 17, 17);
+}
+.preLogo {
+  color: rgb(143, 143, 143);
+  font-size: 35px;
+}
+.logo {
+  font-size: 60px;
+  color: rgb(208, 255, 0);
+  margin-right: 40px;
+  text-shadow: 0 0 5px rgb(0, 0, 0);
+  background: linear-gradient(to right, rgb(99, 0, 124), transparent);
+}
+
+.navList {
+  display: flex;
+  padding: 20px 20px;
+}
+
+.link {
+  border: none;
+  border-radius: var(--card-radius);
+  padding: 5px 8px;
+  outline: none;
+  background-color: var(--background-color);
+
+  color: rgb(151, 151, 151);
+  font-size: 22px;
+  box-shadow: var(--card-shadow);
+  transition: all 250ms;
+}
+
+.link:hover {
+  color: white;
+  box-shadow: var(--card-hover-shadow);
+  background: var(--background-hover-style);
+}
+
+.navItem:not(:last-child) {
+  margin-right: 18px;
+}
+
+.link.active {
+  color: yellow;
+  /* composes: link; */
+}
