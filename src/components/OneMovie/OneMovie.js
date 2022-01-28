@@ -1,5 +1,6 @@
 import s from './OneMovie.module.css'
-import { Fragment } from 'react/cjs/react.production.min'
+import propTypes from 'prop-types';
+
 const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
 function Oneobj({ obj }) {
@@ -16,15 +17,21 @@ function Oneobj({ obj }) {
         )
         }
         <ul className={s.objList}>
-          <li className={s.objItem}>overview: {obj.overview}</li>
           <li className={s.objItem}>release_date: {obj.release_date}</li>
           <li className={s.objItem}>vote_average: {obj.vote_average}</li>
           <li className={s.objItem}>vote_count: {obj.vote_count}</li>
           <li className={s.objItem}>countries: {obj.production_countries.map(el => el.name)}</li>
+          <li className={s.objItem}>overview: {obj.overview}</li>
+
+
         </ul>
       </div>
     </div>
   )
+}
+
+Oneobj.propTypes = {
+  obj: propTypes.object.isRequired
 }
 
 export default Oneobj

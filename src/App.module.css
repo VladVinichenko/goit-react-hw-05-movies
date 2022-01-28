@@ -12,12 +12,13 @@
 }
 
 .preLogo {
-  color: rgb(143, 143, 143);
+  color: rgb(95, 95, 95);
   font-size: 35px;
+  transition: all 250ms;
 }
 .logo {
   font-size: 60px;
-  color: rgb(208, 255, 0);
+  color: rgb(255, 187, 0);
   margin-right: 40px;
   text-shadow: 0 0 5px rgb(0, 0, 0);
   background: linear-gradient(to right, rgb(99, 0, 124), transparent);
@@ -26,6 +27,16 @@
   left: 0;
   height: 80px;
   z-index: -1;
+  transition: all 250ms;
+}
+
+.logo:hover {
+  color: rgb(251, 255, 0);
+  background: linear-gradient(to right, rgb(114, 0, 143), transparent);
+}
+
+.logo:hover .preLogo {
+  color: rgb(160, 160, 160);
 }
 
 .navList {

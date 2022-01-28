@@ -11,7 +11,9 @@ export const App = () => {
   return (
     <BrowserRouter>
       <header className={s.header}>
-        <h1 className={s.logo}><span className={s.preLogo}>the</span>Movie</h1>
+        <NavLink to={ROUTERS.HOME}>
+          <h1 className={s.logo}><span className={s.preLogo}>the</span>Movie</h1>
+        </NavLink>
         <ul className={s.navList}>
           <li className={s.navItem}>
             <NavLink to={ROUTERS.HOME} exact activeClassName={s.selected} className={s.link}>Home</NavLink>
@@ -22,7 +24,7 @@ export const App = () => {
         </ul>
       </header >
       <Switch>
-        <Route path={ROUTERS.ONE_MOVIE} component={MovieDetailsPage} />
+        <Route path={ROUTERS.MOVIES + ROUTERS.ONE_MOVIE} component={MovieDetailsPage} />
         <Route path={ROUTERS.MOVIES} component={MoviesPage} />
         <Route path={ROUTERS.HOME} component={HomePage} exact />
         <Redirect to={ROUTERS.HOME} />

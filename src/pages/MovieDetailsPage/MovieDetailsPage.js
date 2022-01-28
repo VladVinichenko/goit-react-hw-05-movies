@@ -1,20 +1,23 @@
 import s from './MovieDetailsPage.module.css'
-import Loader from '../../components/Loader/Loader';
-import fetchApi from '../../AppService';
-import Button from '../../components/Button/Button';
-import propTypes from 'prop-types';
 import { Fragment } from 'react/cjs/react.production.min';
-import OneMovie from '../../components/OneMovie/OneMovie';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
+import fetchApi from '../../AppService';
+
+import Loader from '../../components/Loader/Loader';
+import Section from '../../components/Section/Section';
+
+const Button = lazy(() => import('../../components/Button/Button.js'))
+const OneMovie = lazy(() => import('../../components/OneMovie/OneMovie.js'))
+const DetailedMovieData = lazy(() => import('../../components/DetailedMovieData/DetailedMovieData'))
 
 export function MovieDetailsPage() {
   const { id } = useParams()
   const history = useHistory()
   const [status, setStatus] = useState('idle')
-  const [page, setPage] = useState(1)
   const [error, setError] = useState(null)
   const [movie, setMovie] = useState({})
+
 
 
   useEffect(() => {
@@ -25,7 +28,6 @@ export function MovieDetailsPage() {
         if (el) {
           setMovie(el)
           setStatus('resolved')
-          console.log(el);
         }
       })
       .catch(errorRejected => {
@@ -36,30 +38,24 @@ export function MovieDetailsPage() {
   }, [])
 
 
-  const nextPage = () => {
-    setPage(page + 1)
-  };
-
-  const prevPage = () => {
-    setPage(page - 1)
-  };
 
 
   return (
     <Fragment>
-      {status === 'search' && <p className={s.idle}> </p>}
-      {status === 'rejected' && <strong className={s.strong}>{error.message}</strong>}
-      {status === 'resolved' && (<div className={s.box} >
-        <OneMovie key={movie.id}
-          obj={movie} />
-        <Button action={() => { history.goBack() }}>Go back</Button>
-      </div>)}
-      {status === 'pending' && <Loader />}
-      {/* <div className={s.navBox}>
-        {status === 'resolved' && page > 1 ? <Button action={prevPage}>Prev Page ({page - 1})</Button> : ''}
-        {status === 'resolved' && <p className={s.currentPage}>{page}</p>}
-        {status === 'resolved' && <Button action={nextPage}>Next Page ({page + 1})</Button>}
-      </div> */}
+      <Suspense fallback={<Loader />}>
+        <Section>
+          {status === 'search' && <p className={s.idle}> </p>}
+          {status === 'rejected' && <strong className={s.strong}>{error.message}</strong>}
+          {status === 'resolved' && (<div className={s.box} >
+            <OneMovie key={movie.id}
+              obj={movie} />
+            <Button action={() => { history.goBack() }}>Go back</Button>
+          </div>)}
+        </Section>
+        {status === 'pending' && <Loader />}
+        <DetailedMovieData />
+      </Suspense>
+
     </Fragment>
   )
 }

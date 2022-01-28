@@ -68,7 +68,7 @@ function ImageGallery({ searchName = '', options = 'search' }) {
         <ul className={s.gallery} >
           {
             movies.map(el => (
-              <Link to={`${ROUTERS.ONE_MOVIE}${el.id}`} key={el.id}>
+              <Link to={ROUTERS.MOVIES + ROUTERS.ONE_MOVIE + `${el.id}`} key={el.id}>
                 <ImageGalleryItem
                   id={el.id}
                   url={el.poster_path}
@@ -94,7 +94,8 @@ function ImageGallery({ searchName = '', options = 'search' }) {
 }
 
 ImageGallery.propTypes = {
-  options: propTypes.string
+  options: propTypes.string,
+  searchName: propTypes.string,
 }
 
 export default ImageGallery

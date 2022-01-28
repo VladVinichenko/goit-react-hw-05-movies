@@ -1,9 +1,10 @@
-import { Fragment } from 'react'
-import ImageGallery from '../../components/ImageGallery/ImageGallery'
-import Searchbar from '../../components/Searchbar/Searchbar'
-import s from './MoviesPage.module.css'
+import { Fragment, lazy, Suspense } from 'react'
 import Section from '../../components/Section/Section';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import Loader from '../../components/Loader/Loader';
+
+const Searchbar = lazy(() => import('../../components/Searchbar/Searchbar'))
+const ImageGallery = lazy(() => import('../../components/ImageGallery/ImageGallery'))
 
 export function MoviesPage() {
 
@@ -11,10 +12,15 @@ export function MoviesPage() {
 
   return (
     <Fragment>
-      <Searchbar onSubmitSearchName={setSearchName} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Searchbar onSubmitSearchName={setSearchName} />
+      </Suspense>
       <Section>
-        <ImageGallery searchName={searchName} options='search' />
+        <Suspense fallback={<Loader />}>
+          <ImageGallery searchName={searchName} options='search' />
+        </Suspense>
       </Section>
+
     </Fragment>
   )
 }
