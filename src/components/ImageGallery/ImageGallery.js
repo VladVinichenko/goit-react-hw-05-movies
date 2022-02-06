@@ -1,7 +1,6 @@
 import s from './ImageGallery.module.css'
 
-import React, { useState, useEffect } from "react";
-import { Fragment } from "react/cjs/react.production.min";
+import { useEffect, useState, Fragment } from 'react'
 import fetchApi from '../../AppService';
 import Loader from '../Loader/Loader';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
@@ -13,7 +12,7 @@ import { ROUTERS } from '../../consts';
 function ImageGallery({ searchName = '', options = 'search' }) {
   const [status, setStatus] = useState('search')
   const [page, setPage] = useState(1)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState('')
   const [movies, setMovies] = useState([])
 
   const fetchMovies = () => {

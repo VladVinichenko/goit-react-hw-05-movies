@@ -1,38 +1,50 @@
 import fetchApi from '../../AppService';
-import { useEffect, useState } from 'react/cjs/react.development';
+import { useEffect, useState, Fragment } from 'react'
 import s from './Cast.module.css'
 import Loader from '../Loader/Loader';
 import propTypes from 'prop-types';
-import { Fragment } from 'react/cjs/react.production.min';
 
 
-function Cast({ modieId }) {
+function Cast({ movieId }) {
   const [view, setView] = useState('idle')
-  const [cast, setCast] = useState({})
-  const [error, setError] = useState(null)
+  const [cast, setCast] = useState('')
+  const [error, setError] = useState('')
+
 
   const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-  useEffect(() => {
-    if (cast.cast) {
-      setCast({})
-      return
-    }
-    setCast({})
-    setView('pending')
-    fetchApi('movie', modieId.slice(3), '', 'credits')
-      .then(el => {
-        if (el) {
-          setCast(el)
-          setView('resolved')
-        }
-      })
-      .catch(errorRejected => {
-        setError(errorRejected);
-        setView('rejected')
+
+  const fetchMovies = () => {
+    try {
+      if (cast.cast) {
+        setCast('')
+        return
       }
-      )
-  }, [])
+      setCast('')
+      setView('pending')
+      fetchApi('movie', movieId, '', 'credits')
+        .then(el => {
+          if (el) {
+            setCast(el)
+            setView('resolved')
+          }
+        })
+        .catch(errorRejected => {
+          setError(errorRejected);
+          setView('rejected')
+        }
+        )
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  useEffect(() => {
+
+    movieId && fetchMovies()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [movieId])
 
   return (
     <Fragment>
@@ -54,12 +66,15 @@ function Cast({ modieId }) {
           )}
         </ul>
       )}
+
+      {/* <p>{movieId}</p> */}
+
     </Fragment>
   )
 }
 
 Cast.propTypes = {
-  modieId: propTypes.string.isRequired
+  movieId: propTypes.string.isRequired
 }
 
 

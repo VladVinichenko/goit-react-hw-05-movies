@@ -35,6 +35,7 @@ export function MovieDetailsPage() {
         setStatus('rejected')
       }
       )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 

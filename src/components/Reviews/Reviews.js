@@ -1,14 +1,13 @@
 import fetchApi from '../../AppService';
-import { useEffect, useState } from 'react/cjs/react.development';
+import { useEffect, useState, Fragment } from 'react'
 import s from './Reviews.module.css'
 import Loader from '../Loader/Loader'
-import { Fragment } from 'react/cjs/react.production.min';
 import propTypes from 'prop-types';
 
-function Reviews({ modieId }) {
+function Reviews({ movieId }) {
   const [view, setView] = useState('idle')
   const [reviews, setReviews] = useState({})
-  const [error, setError] = useState(null)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (reviews.results) {
@@ -18,7 +17,7 @@ function Reviews({ modieId }) {
     }
     setReviews({})
     setView('pending')
-    fetchApi('movie', modieId.slice(3), 1, 'reviews')
+    fetchApi('movie', movieId, 1, 'reviews')
       .then(el => {
         if (el) {
           setReviews(el)
@@ -30,6 +29,7 @@ function Reviews({ modieId }) {
         setView('rejected')
       }
       )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -55,7 +55,7 @@ function Reviews({ modieId }) {
 }
 
 Reviews.propTypes = {
-  modieId: propTypes.string.isRequired
+  movieId: propTypes.string.isRequired
 }
 
 export default Reviews
