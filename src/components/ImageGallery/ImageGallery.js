@@ -6,17 +6,47 @@ import Loader from '../Loader/Loader';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Button from '../Button/Button';
 import propTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { ROUTERS } from '../../consts';
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { matchPath } from 'react-router-dom';
+import { useRouteMatch } from 'react-router-dom';
 
-function ImageGallery({ searchName = '', options = 'search' }) {
+function ImageGallery({ searchValue, options = 'search' }) {
+  const [searchName, setSearchName] = useState('')
+  const currentPath = useHistory()
+  const path = useLocation()
   const [status, setStatus] = useState('search')
   const [page, setPage] = useState(1)
   const [error, setError] = useState('')
   const [movies, setMovies] = useState([])
 
+
+  useEffect(() => {
+    setSearchName(searchValue)
+  })
+
+  useEffect(() => {
+    if (options === 'search') {
+      const splitSearch = path.search.split('/')
+      splitSearch[0].slice(1) ? setSearchName(splitSearch[0].slice(1)) : setSearchName('')
+      splitSearch[1] && setPage(Number(splitSearch[1]))
+    }
+    if (options === 'trending') {
+      console.log(path.search);
+      const pageUrl = Number(path.search.slice(1))
+      pageUrl > 0 ? setPage(pageUrl) : setPage(1)
+    }
+
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
+
   const fetchMovies = () => {
-    if (searchName.trim().length > 0 || options === 'trending') {
+    if (searchName || options === 'trending') {
       setMovies([])
       setStatus('pending')
       fetchApi(options, searchName, page)
@@ -39,25 +69,27 @@ function ImageGallery({ searchName = '', options = 'search' }) {
     }
   }
 
-
   useEffect(() => {
+    console.log(page);
+    console.log(searchName);
+    console.log(searchValue);
+    searchName && currentPath.replace({ pathname: ROUTERS.MOVIES, search: `${searchName}/${page}` })
+    options === 'trending' && currentPath.replace({ pathname: ROUTERS.HOME, search: `${page}` })
     options === 'trending' && setStatus('pending')
     fetchMovies()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [searchName, page, currentPath])
 
-  useEffect(() => {
-    fetchMovies()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchName, page])
 
   const nextPage = () => {
     setPage(page + 1)
+
   };
 
   const prevPage = () => {
     setPage(page - 1)
   };
+
 
   return (
     <Fragment>

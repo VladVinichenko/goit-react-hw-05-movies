@@ -6,8 +6,8 @@ import propTypes from 'prop-types';
 
 import React, { useState } from 'react'
 
-function Searchbar({ onSubmitSearchName }) {
-  const [searchName, setSearchName] = useState('')
+function Searchbar({ onSubmitSearchName, value }) {
+  const [searchName, setSearchName] = useState(value)
 
   const onInputname = (val) => {
     setSearchName(val.currentTarget.value.toLowerCase())
