@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkgoit_react_hw_05_movies=self.webpackChunkgoit_react_hw_05_movies||[]).push([[307],{307:function(n,t,e){e.r(t),e.d(t,{default:function(){return a}});var c="Button_button__qq0+y",u=e(184),a=function(n){var t=n.name,e=n.action,a=n.children;return(0,u.jsx)("button",{className:c,name:t,onClick:e,children:a})}}}]);
-//# sourceMappingURL=307.dbe8c849.chunk.js.map
