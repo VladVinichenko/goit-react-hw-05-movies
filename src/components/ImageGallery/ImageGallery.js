@@ -8,10 +8,7 @@ import Button from '../Button/Button';
 import propTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import { ROUTERS } from '../../consts';
-import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { matchPath } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom';
 
 function ImageGallery({ searchValue, options = 'search' }) {
   const [searchName, setSearchName] = useState('')
@@ -25,7 +22,7 @@ function ImageGallery({ searchValue, options = 'search' }) {
 
   useEffect(() => {
     setSearchName(searchValue)
-  })
+  }, [searchValue])
 
   useEffect(() => {
     if (options === 'search') {
